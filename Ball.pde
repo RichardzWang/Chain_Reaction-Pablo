@@ -1,3 +1,8 @@
+// Team Pablo: Richard Wang, Manish Saha, Jack Schluger
+// APCS2 pd05
+// HW47 -- All That Bouncin'
+// 2016-05-27
+
 class Ball {
   
   final static int MOVING = 0;
@@ -68,6 +73,10 @@ class Ball {
         draw(); // to remove the centers ( sometimes they stay as dots )
         state = DEAD;
       }
+    }
+    else { // state = DEAD
+      rad = 0;
+      draw();
     }
   }
   
