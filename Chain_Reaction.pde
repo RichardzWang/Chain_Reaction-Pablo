@@ -2,7 +2,6 @@ Ball[] balls;
 
 boolean reactionStarted;
 
-
 void setup() {
   size(600, 600);
   reactionStarted = false;
@@ -12,31 +11,21 @@ void setup() {
   balls[0].state = Ball.DEAD;
 }
 
-
 void draw() {
   background(0);
 
-
-  for (int i=0; i < balls.length; i++ ) { // for loop to test if they collide
-     for (int c = 0; c < i ; c++) {
-       if (balls[i].isTouching(balls[c]) && balls[i].state == Ball.MOVING) {
-         balls[i].state = Ball.GROWING;
+  for (Ball a : balls) { // for loop to test if they collide
+     for (Ball b : balls) {
+       if ( a != b ) {
+         if (a.isTouching(b)) {
+           a.state = Ball.GROWING;
+         }
        }
-     }
-     
-     for (int c = i + 1; c < balls.length ; c++) {
-       if (balls[i].isTouching(balls[c]) && balls[i].state == Ball.MOVING) {
-         balls[i].state = Ball.GROWING;
-       }
-     }
-  }
-
-  for (int i=0; i < balls.length; i++ ) { // for loop that keeps the balls moving
-    balls[i].draw(i);
-    balls[i].process();
+    }
+    a.draw();
+    a.process();
   }
 }
-
 
 void mouseClicked() {
   if ( !reactionStarted ) {
@@ -45,5 +34,5 @@ void mouseClicked() {
     balls[0].rad = 0.1;
     balls[0].state = Ball.GROWING;
     reactionStarted = true;
-    }
+  }
 }
