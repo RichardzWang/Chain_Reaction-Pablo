@@ -1,3 +1,8 @@
+// Team Pablo: Richard Wang, Manish Saha, Jack Schluger
+// APCS2 pd05
+// HW47 -- All That Bouncin'
+// 2016-05-27
+
 Ball[] balls;
 
 boolean reactionStarted;
