@@ -5,8 +5,6 @@ class Ball {
   final static int SHRINKING = 2;
   final static int DEAD = 3;
       
-  //other constants necessary?
-  
   float x;
   float y;
   float rad;
@@ -14,7 +12,6 @@ class Ball {
   float dx;
   float dy;
   int state;
-
   
   Ball() {
     float r = random(256);
@@ -24,15 +21,18 @@ class Ball {
     
     rad = 10;
     
-    x = random( (width - r) + r/2 );
-    y = random( (height - r) + r/2 );
+    x = random( (width - rad) + rad/2 );
+    y = random( (height - rad) + rad/2 );
 
     dx = random(10) - 5;
+    while (dx == 0)
+      dx = random(10) - 5;
     dy = random(10) - 5;
-    
+    while (dy == 0)
+      dx = random(10) - 5;
+      
     state = MOVING;
   }
-  
 
   void move() {
     x = x + dx;
@@ -41,16 +41,10 @@ class Ball {
   }
   
   void bounce() {
-    if (x < 0) {
+    if (x > width - rad || x < rad) {
       dx = -dx;
     }
-    if (x > width) {
-      dx = -dx;
-    }
-    if (y < 0) {
-      dy = -dy;
-    }
-    if (y > height) {
+    if (y > height - rad || y < rad) {
       dy = -dy;
     }
   }
@@ -59,43 +53,38 @@ class Ball {
     if (state == MOVING) {
       move();
     }
-    else if (state == GROWING) {
+    if (state == GROWING) {
       rad += 0.2;
-      ellipse(x,y,2 * rad, 2 * rad);
+      draw();
       if (rad >= 50) {
         state = SHRINKING;
       }
     }
-    else if (state == SHRINKING) {
+    if (state == SHRINKING) {
       rad -= 0.2;
-      ellipse(x,y,2 * rad, 2 * rad);
+      draw();
       if (rad <= 0) {
         rad = 0;
-        ellipse(x,y, 2 *rad, 2 *rad); // to remove the centers ( sometimes they stay as dots )
+        draw(); // to remove the centers ( sometimes they stay as dots )
         state = DEAD;
       }
     }
-    else {
-      //dead...
-    }
   }
   
-  void draw(int i) {
+  void draw() {
     fill(c);
+    noStroke();
     ellipse(x,y,2*rad,2*rad);
   }
  
- 
  boolean isTouching( Ball other ) {
-   //distance formula squared
-   if (other.state == GROWING || other.state == SHRINKING) { // only works if other ball is growing/shrinking
-     return ((rad*rad + other.rad * other.rad) > ((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y))); 
+   //distance formula
+   if (state == MOVING && (other.state == GROWING || other.state == SHRINKING)) { // only works if other ball is growing/shrinking
+     return ((rad + other.rad) > (sqrt(pow((x - other.x),2) + pow((y - other.y),2)))); 
    }
    else {
      return false;
    }
  }
  
- 
-  
 }//end class Ball
